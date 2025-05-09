@@ -5,22 +5,27 @@ use Slim\Factory\AppFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// Instantiate App
 $app = AppFactory::create();
 
-// Add error middleware
-$app->addErrorMiddleware(true, true, true);
-
-// Add routes
 $app->get('/', function (Request $request, Response $response) {
-    $response->getBody()->write('<a href="/hello/world">Try /hello/world</a>');
-    return $response;
-});
+    $htmlContent = "
+    <!DOCTYPE html>
+    <html lang='ca'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Pàgina Principal</title>
+    </head>
+    <body>
+        <h1><a href='http://www.itb.cat' target='_BLANK'>Institut Tecnològic de Barcelona</a></h1>
+        <h3>Professors: Rai i David</h3>
+        <p>Visca el Giro!</p>
+    </body>
+    </html>
+    ";
 
-$app->get('/hello/{name}', function (Request $request, Response $response, $args) {
-    $name = $args['name'];
-    $response->getBody()->write("Hello, $name");
-    return $response;
+    $response->getBody()->write($htmlContent);
+    return $response->withHeader('Content-Type', 'text/html');
 });
 
 $app->run();
